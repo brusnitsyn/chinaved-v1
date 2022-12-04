@@ -110,24 +110,24 @@ export default {
             <div
               class="flex flex-col items-center justify-center bg-gray-100 rounded-lg lg:h-[623px] h-[343px] lg:ml-2 mb-2 lg:mb-0 lg:order-2 lg:grow"
             >
-              <ImageMagnifier
-                :src="`${activeImage}`"
-                :zoom-src="activeImage"
-                width="440"
-                height="440"
-                mask-height="180"
-                mask-width="180"
-                zoom-width="440"
-                zoom-height="440"
-                zoom-class="max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]"
-              />
+<!--              <ImageMagnifier-->
+<!--                :src="`${activeImage}`"-->
+<!--                :zoom-src="activeImage"-->
+<!--                width="440"-->
+<!--                height="440"-->
+<!--                mask-height="180"-->
+<!--                mask-width="180"-->
+<!--                zoom-width="440"-->
+<!--                zoom-height="440"-->
+<!--                zoom-class="max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]"-->
+<!--              />-->
               <!--                class="rounded-lg w-full h-full "-->
 <!--              max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]-->
-              <!--              <NuxtImg-->
-              <!--                :src="activeImage"-->
-              <!--                loading="lazy"-->
-              <!--                class="rounded-lg max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]"-->
-              <!--              />-->
+                            <NuxtImg
+                              :src="activeImage"
+                              loading="lazy"
+                              class="rounded-lg max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]"
+                            />
             </div>
           </Skeleton>
           <div

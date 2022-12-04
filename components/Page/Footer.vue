@@ -17,6 +17,7 @@ export default {
       navMenu: [
         {type: 'link', text: 'Главная', route: {name: 'index'}},
         {type: 'link', text: 'Каталог', route: {name: 'catalog'}},
+        {type: 'link', text: 'Таможенный сервис', route: {name: 'service'}},
         {type: 'link', text: 'Новости', route: {name: 'news'}},
         {type: 'link', text: 'Контакты', route: {name: 'contacts'}},
       ],
@@ -27,12 +28,11 @@ export default {
       ],
       calls: [
         {type: 'link', href: 'tel:+79145692181', text: '8-914-569-21-81'},
-        {type: 'link', href: 'tel:+79246767967', text: '8-924-676-79-67'},
-        // {type: 'link', href: 'tel:+79145692181', text: '8-914-569-21-81'},
       ],
-      socials: [
-        {icon: 'telegram-fill', href: 'https://t.me/nilparts'}
-      ]
+      socials: []
+      // socials: [
+      //   {icon: 'telegram-fill', href: 'https://t.me/nilparts'}
+      // ]
     }
   }
 }
@@ -74,7 +74,7 @@ export default {
             <div>
               <a v-for="call in calls" :href="call.href" class="font-medium">{{ call.text }} (с 09:00 до 19:00)<br></a>
             </div>
-            <div class="flex gap-x-2">
+            <div v-if="socials" class="flex gap-x-2">
               <a v-for="social in socials" :href="social.href" class="w-[38px] h-[38px] bg-neutral-200 hover:bg-neutral-300 transition-colors rounded flex items-center justify-center">
                 <iconify-icon :icon="`akar-icons:${social.icon}`" />
               </a>

@@ -5,7 +5,7 @@ import p from "~/package.json";
 export default {
   computed: {
     ...mapGetters({
-      advert: 'advert/getAdvert',
+      advert: 'home/getAdvertBanner',
     }),
     pName() {
       return p.name;
@@ -27,6 +27,7 @@ export default {
       menus: [
         { type: 'link', text: 'Главная', route: { name: 'index' } },
         { type: 'link', text: 'Каталог', route: { name: 'catalog' } },
+        { type: 'link', text: 'Таможенный сервис', route: { name: 'service' } },
         { type: 'link', text: 'Новости', route: { name: 'news' } },
         { type: 'link', text: 'Контакты', route: { name: 'contacts' } },
       ],
@@ -46,10 +47,10 @@ export default {
           {{ advert.text }}
         </span>
         <Anchor
-          v-if="advert.buttonText && advert.buttonText.length > 0"
+          v-if="advert.btn_text"
           class="underline font-bold"
-          :text="advert.buttonText"
-          :to="advert.url"
+          :text="advert.btn_text"
+          :href="advert.btn_link"
         />
       </div>
     </template>
