@@ -33,20 +33,26 @@ export default {
 </script>
 
 <template>
-  <NuxtLink
-    v-if="to"
-    tag="a"
-    :to="to"
-    :class="`${defaultStyle}`"
-  >
-    <slot>{{ text }}</slot>
-  </NuxtLink>
-  <a
-    v-else
-    :class="`${defaultStyle}`"
-    :href="href"
-    @click="onClick"
-  >
-    <slot>{{ text }}</slot>
-  </a>
+  <div :class="`inline-flex group ${defaultStyle}`">
+    <NuxtLink
+      v-if="to"
+      tag="a"
+      :to="to"
+    >
+      <slot>{{ text }}</slot>
+    </NuxtLink>
+    <a
+      v-else
+      :href="href"
+      @click="onClick"
+    >
+      <slot>{{ text }}</slot>
+    </a>
+    <div
+      v-if="$scopedSlots.suffix"
+      class="ml-2 flex items-center justify-center group-hover:translate-x-0.5 transition-transform duration-300"
+    >
+      <slot name="suffix" />
+    </div>
+  </div>
 </template>
