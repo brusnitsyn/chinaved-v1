@@ -1,47 +1,30 @@
 export const state = () => ({
-  heroSlides: [],
-  advertBanner: {},
+  banner: {},
+  slides: [],
 })
 
 export const getters = {
-  getHeroSlides(state) {
-    return state.heroSlides
-  },
-  getAdvertBanner(state) {
-    return state.advertBanner
-  },
+
 }
 
 export const mutations = {
   setData(state, data) {
-    state.heroSlides = data.slides
-    state.advertBanner = data.banner
+    state.banner = data.banner
+    state.slides = data.slides
   },
-  setHeroSlides(state, slides) {
-    state.heroSlides = slides
+  setBanner(state, banner) {
+    state.banner = banner
   },
-  setAdvertBanner(state, banner) {
-    state.advertBanner = banner
+  setSlides(state, slides) {
+    state.slides = slides
   },
 }
 
 export const actions = {
-  async fetchData({commit, state}) {
-    const response = await this.$axios.get('/home')
-
+  async fetchData({ commit }) {
+    const response = await this.$axios.get(`/home`)
     const result = await response.data.data
+
     await commit('setData', result)
-  },
-
-  async fetchHeroSlides({commit, state}) {
-    const slides = await this.$axios.get('/home')
-    const result = await slides.data.data.slides
-    await commit('setHeroSlides', result)
-  },
-
-  async fetchAdvertBanner({commit, state}) {
-    const slides = await this.$axios.get('/home')
-    const result = await slides.data.data.banner
-    await commit('setHeroSlides', result)
   },
 }

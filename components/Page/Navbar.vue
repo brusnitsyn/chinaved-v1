@@ -1,22 +1,18 @@
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 import p from "~/package.json";
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '~/tailwind.config'
+
+const fullConfig = resolveConfig(tailwindConfig);
 
 export default {
   computed: {
-    ...mapGetters({
-      advert: 'home/getAdvertBanner',
+    ...mapState('home', {
+      banner: state => state.banner
     }),
     pName() {
       return p.name;
-    },
-    isAdvert() {
-      return (
-        this.advert !== undefined &&
-        this.advert !== null &&
-        Object.keys(this.advert).length &&
-        this.advert.text !== null
-      )
     },
     actionSheetHeader() {
       return this.$auth.loggedIn ? `Привет, ${this.$auth.user.name}` : this.pName
@@ -24,15 +20,47 @@ export default {
   },
   data() {
     return {
+      searchOverlayOn: false,
+      search: '',
       menus: [
-        { type: 'link', text: 'Главная', route: { name: 'index' } },
-        { type: 'link', text: 'Каталог', route: { name: 'catalog' } },
-        { type: 'link', text: 'Таможенный сервис', route: { name: 'service' } },
-        { type: 'link', text: 'Новости', route: { name: 'news' } },
-        { type: 'link', text: 'Контакты', route: { name: 'contacts' } },
+        {type: 'link', text: 'Главная', route: {name: 'index'}},
+        {type: 'link', text: 'Каталог', route: {name: 'catalog'}},
+        {type: 'link', text: 'Новости', route: {name: 'news'}},
+        {type: 'link', text: 'Контакты', route: {name: 'contacts'}},
       ],
     }
   },
+  methods: {
+    getBreakpointValue(value) {
+      return parseInt(fullConfig.theme.screens[value].replace('px', ''), 10)
+    },
+    getCurrentBreakpoint() {
+      let biggestBreakpointValue = 0, currentBreakpoint
+      // console.log(fullConfig.theme.screens)
+      for (const breakpoint of Object.keys(fullConfig.theme.screens)) {
+        const breakpointValue = this.getBreakpointValue(breakpoint);
+        // console.log(breakpointValue)
+        if (
+          breakpointValue > biggestBreakpointValue &&
+          window.innerWidth >= breakpointValue
+        ) {
+          biggestBreakpointValue = breakpointValue;
+          currentBreakpoint = breakpoint;
+        }
+      }
+      return {breakpoint: currentBreakpoint, value: biggestBreakpointValue};
+    },
+
+    async openSearch() {
+      const currentBreakpoint = this.getCurrentBreakpoint()
+      const mdBreakpointValue = this.getBreakpointValue('md')
+
+      if(currentBreakpoint.value > mdBreakpointValue)
+        this.searchOverlayOn = true
+      else
+        await this.$router.push({name: 'search'})
+    }
+  }
 }
 </script>
 
@@ -40,17 +68,17 @@ export default {
   <BuilderNavbar>
     <template #banner>
       <div
-        v-if="isAdvert"
+        v-if="banner"
         class="text-white text-xs text-center py-1 px-4 lg:px-8 bg-primary-500"
       >
         <span class="mr-1">
-          {{ advert.text }}
+          {{ banner.text }}
         </span>
         <Anchor
-          v-if="advert.btn_text"
+          v-if="banner.btn_text"
           class="underline font-bold"
-          :text="advert.btn_text"
-          :href="advert.btn_link"
+          :text="banner.btn_text"
+          :to="banner.btn_url"
         />
       </div>
     </template>
@@ -92,20 +120,53 @@ export default {
           </ul>
         </nav>
         <div
-          class="flex space-x-4 border-l ml-6 pl-6 border-gray-900/10 dark:border-gray-50/[0.2]"
+          class="flex gap-x-4 border-l ml-6 pl-6 border-gray-900/10 dark:border-gray-50/[0.2]"
         >
           <button
             class="flex items-center focus:outline-none"
             aria-label="To Search Page"
-            @click="$router.push({ name: 'search' })"
+            @click="openSearch"
           >
             <span
               class="flex items-center text-gray-600 dark:text-gray-300"
               aria-hidden="true"
             >
-              <iconify-icon icon="charm:search" class="text-xl" />
+              <iconify-icon icon="charm:search" class="text-xl"/>
             </span>
           </button>
+
+          <div v-if="searchOverlayOn" class="fixed inset-0 bg-dark/95 z-50 h-screen w-screen" @keydown.esc="searchOverlayOn = false">
+            <div class="max-w-8xl w-full mx-auto">
+              <div class="py-3 lg:py-10 lg:px-8 mx-4 lg:mx-0">
+                <div class="flex flex-col">
+                  <div class="flex justify-between items-center text-white">
+                    <h1>Поиск по каталогу</h1>
+                    <button class="flex justify-center items-center" @click="searchOverlayOn = false">
+                      <iconify-icon icon="mdi:window-close" width="22" height="22"></iconify-icon>
+                    </button>
+                  </div>
+                  <div class="mt-8">
+                    <input type="text" name="searchQuery" autofocus v-model="search" class="text-white border-b border-white focus:border-primary-500 bg-transparent w-full placeholder-neutral-200 outline-none pb-1.5" placeholder="Введите наименование или артикул" />
+                  </div>
+                  <div class="mt-8">
+                    <div class="grid grid-cols-4 gap-y-4 gap-x-4">
+                      <div class="bg-white rounded flex justify-center items-center h-[240px]" v-for="i in 8">
+                        {{i}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+                    <Anchor :to="{name: 'search'}" text="Посмотреть все" class="text-white">
+                      <template #suffix>
+                        <iconify-icon icon="material-symbols:arrow-forward-rounded"></iconify-icon>
+                      </template>
+                    </Anchor>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <button
             v-if="$auth.loggedIn"
             class="flex items-center focus:outline-none"
@@ -116,17 +177,17 @@ export default {
               class="flex items-center text-gray-600 dark:text-gray-300"
               aria-hidden="true"
             >
-              <iconify-icon icon="charm:person" class="text-xl" />
+              <iconify-icon icon="charm:person" class="text-xl"/>
             </span>
           </button>
-          <ThemeSwitcher />
+          <ThemeSwitcher/>
         </div>
       </div>
     </template>
     <template #options="{ toggleOptions }">
       <ActionSheet @onClose="toggleOptions(false)">
         <ActionSheetBody>
-          <ActionSheetHeader :text="actionSheetHeader" />
+          <ActionSheetHeader :text="actionSheetHeader"/>
           <nav class="leading-6 font-medium text-gray-600 dark:text-gray-300">
             <ul class="flex flex-col">
               <li
@@ -143,7 +204,7 @@ export default {
                   :to="item.route ? item.route : undefined"
                   :href="item.href ? item.href : undefined"
                   class="flex-1 hover:no-underline capitalize"
-                  >{{ item.text }}
+                >{{ item.text }}
                 </Anchor>
                 <Button
                   v-else-if="item.type === 'button'"
@@ -173,7 +234,7 @@ export default {
           <!--            Сменить тему-->
           <!--          </div>-->
           <div class="mt-2">
-            <ThemeSwitcher type="select-box" />
+            <ThemeSwitcher type="select-box"/>
           </div>
         </ActionSheetBody>
         <Button
