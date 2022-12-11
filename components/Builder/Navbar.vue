@@ -120,45 +120,34 @@ export default {
     </div>
     <ClientOnly>
       <Portal to="app-after">
-        <!-- drawer -->
-        <!--        <Transition name="slide-fade-from-up" mode="out-in">-->
-        <!--          <div-->
-        <!--            v-if="showDrawer"-->
-        <!--            class="fixed lg:hidden bg-gray-100 dark:bg-slate-800 pt-12 top-0 left-0 w-screen h-screen z-30 flex flex-col"-->
-        <!--          >-->
-        <!--            <div class="flex-1 flex flex-col relative overflow-y-auto">-->
-        <!--              <slot name="drawer" :toggle-drawer="toggleDrawer"/>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </Transition>-->
-        <ActionSheetOverlay v-if="showOptions" @click="toggleOptions(false)"/>
-        <Transition name="slide-fade-from-up" appear>
-          <!-- options -->
+        <div>
+          <ActionSheetOverlay v-show="showOptions" @click="toggleOptions(false)"/>
           <slot
-            v-if="showOptions"
             name="options"
             :toggle-options="toggleOptions"
             :show-options="showOptions"
           />
-        </Transition>
+        </div>
       </Portal>
     </ClientOnly>
   </div>
 </template>
 
 <style lang="scss">
-.slide-fade-from-up-enter-active {
-  transition: all 0.3s ease-out;
-}
-
-.slide-fade-from-up-leave-active {
-  transition: all 0.28s;
-}
-
-.slide-fade-from-up-enter-from,
-.slide-fade-from-up-leave-to {
-  transform: translateY(100%);
-}
+//.slide-fade-from-up-enter-active {
+//  transition: all 0.3s ease-out;
+//}
+//
+//.slide-fade-from-up-leave-active {
+//  transition: all 0.28s;
+//}
+//
+//.slide-fade-from-up-enter-to {
+//  transform: translateY(100%);
+//}
+//.slide-fade-from-up-leave-to {
+//  transform: translateY(-100%);
+//}
 
 a.router-link-active {
   font-weight: bold;
