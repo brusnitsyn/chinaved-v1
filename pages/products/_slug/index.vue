@@ -110,24 +110,22 @@ export default {
             <div
               class="flex flex-col items-center justify-center bg-gray-100 rounded-lg lg:h-[623px] h-[343px] lg:ml-2 mb-2 lg:mb-0 lg:order-2 lg:grow"
             >
-<!--              <ImageMagnifier-->
-<!--                :src="`${activeImage}`"-->
-<!--                :zoom-src="activeImage"-->
-<!--                width="440"-->
-<!--                height="440"-->
-<!--                mask-height="180"-->
-<!--                mask-width="180"-->
-<!--                zoom-width="440"-->
-<!--                zoom-height="440"-->
-<!--                zoom-class="max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]"-->
-<!--              />-->
-              <!--                class="rounded-lg w-full h-full "-->
-<!--              max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]-->
-                            <NuxtImg
-                              :src="activeImage"
-                              loading="lazy"
-                              class="rounded-lg max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]"
-                            />
+              <!--              <ImageMagnifier-->
+              <!--                :src="`${activeImage}`"-->
+              <!--                :zoom-src="activeImage"-->
+              <!--                width="440"-->
+              <!--                height="440"-->
+              <!--                mask-height="180"-->
+              <!--                mask-width="180"-->
+              <!--                zoom-width="440"-->
+              <!--                zoom-height="440"-->
+              <!--                zoom-class="max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]"-->
+              <!--              />-->
+              <NuxtImg
+                :src="activeImage"
+                loading="lazy"
+                class="rounded-lg max-w-[320px] max-h-[320px] lg:max-w-[440px] lg:max-h-[440px]"
+              />
             </div>
           </Skeleton>
           <div
@@ -135,6 +133,7 @@ export default {
           >
             <div class="relative lg:w-auto w-full lg:h-full">
               <div
+                v-if="product.media.length > 3"
                 class="swiper-prev flex items-center justify-center absolute left-0 top-1/2 lg:top-0 lg:left-1/2 bg-white shadow rounded-full p-1.5 -translate-x-3 -translate-y-3.5 lg:-translate-x-3.5 lg:-translate-y-3.5 z-10"
                 slot="button-prev"
               >
@@ -178,6 +177,7 @@ export default {
                 </Swiper>
               </div>
               <div
+                v-if="product.media.length > 3"
                 class="swiper-next flex items-center justify-center absolute right-0 bottom-1/2 lg:right-auto lg:bottom-0 lg:left-1/2 bg-white shadow rounded-full translate-x-3 translate-y-3.5 lg:-translate-x-3.5 p-1.5 lg:translate-y-3.5 z-10"
                 slot="button-next"
               >
