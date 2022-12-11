@@ -76,8 +76,8 @@ export default {
 <template>
   <div class="min-w-max">
     <section class="flex justify-center bg-white rounded-lg border border-gray-900/10 dark:border-gray-50/20 px-2 lg:px-10 py-3 text-gray-700">
-      <ul class="flex items-center select-none">
-        <li class="pr-4 lg:pr-6" v-if="hasPrev()">
+      <ul class="flex items-center gap-x-2 lg:gap-x-6 select-none">
+        <li v-if="hasPrev()">
           <a @click.prevent="changePage(prevPage)">
             <div class="flex items-center justify-center hover:bg-gray-200 rounded-md h-6 w-6 lg:h-8 lg:w-8 cursor-pointer">
               <div>
@@ -89,7 +89,7 @@ export default {
             </div>
           </a>
         </li>
-        <li class="pr-4 lg:pr-6" v-if="hasFirst()">
+        <li v-if="hasFirst()">
           <a @click.prevent="changePage(1)">
             <div class="flex hover:bg-gray-200 rounded-md h-6 w-6 lg:h-8 lg:w-8 cursor-pointer items-center justify-center">
               <span>
@@ -99,7 +99,7 @@ export default {
           </a>
         </li>
         <li class="pr-4 lg:pr-6 cursor-default" v-if="hasFirst()">...</li>
-        <li class="pr-4 lg:pr-6" v-for="page in pages">
+        <li v-for="page in pages">
           <a @click.prevent="changePage(page)">
             <div :class="{'bg-primary-500 text-white cursor-default': current === page, 'lg:hover:bg-gray-200 cursor-pointer': current !== page}"
                  class="flex rounded-md h-6 w-6 lg:h-8 lg:w-8 items-center justify-center">
@@ -108,7 +108,7 @@ export default {
           </a>
         </li>
         <li class="pr-4 lg:pr-6 cursor-default" v-if="hasLast()">...</li>
-        <li class="pr-4 lg:pr-6" v-if="hasLast()">
+        <li v-if="hasLast()">
           <a @click.prevent="changePage(totalPages)">
             <div class="flex hover:bg-gray-200 rounded-md h-6 w-6 lg:h-8 lg:w-8  items-center justify-center cursor-pointer lg:hover:bg-gray-200">
               <span>
