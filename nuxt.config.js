@@ -1,12 +1,12 @@
 export default {
   publicRuntimeConfig: {
-    serverURL: process.env.NODE_ENV === 'production' ? process.env.SERVER_URL : 'http://26.207.206.31:8000',
-    serverAPI: process.env.NODE_ENV === 'production' ? process.env.SERVER_API : 'http://26.207.206.31:8000/api',
+    serverURL: process.env.NODE_ENV === 'production' ? process.env.SERVER_URL : 'http://127.0.0.1:8000',
+    serverAPI: process.env.NODE_ENV === 'production' ? process.env.SERVER_API : 'http://127.0.0.1:8000/api',
   },
 
-  server: {
-    host: '0.0.0.0'
-  },
+  // server: {
+  //   host: '0.0.0.0'
+  // },
 
   loading: {
     color: '#1f2937',
@@ -17,7 +17,7 @@ export default {
   head: {
     title: '',
     titleTemplate: (titleChunk) => {
-      return titleChunk ? `${titleChunk} - Chinaved – интернет магазин спецтехники по доступным ценам` : 'Chinaved';
+      return titleChunk ? `${titleChunk} - Chinaved – интернет магазин спецтехники по доступным ценам` : 'Chinaved – интернет магазин спецтехники по доступным ценам';
     },
     meta: [
       { charset: 'utf-8' },
@@ -50,6 +50,10 @@ export default {
       src: '~/plugins/table.js',
       ssr: false
     },
+    {
+      src: '~/plugins/vFocus.js',
+      ssr: false
+    }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -82,13 +86,13 @@ export default {
         // accurateTrackBounce: true,
       }
     ],
-    [
-      'nuxt-vuex-localstorage',
-      {
-        mode: 'debug',
-        localStorage: ['products/basket', 'products/favorites']
-      }
-    ]
+    // [
+    //   'nuxt-vuex-localstorage',
+    //   {
+    //     mode: 'debug',
+    //     localStorage: ['products/basket', 'products/favorites']
+    //   }
+    // ]
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
