@@ -30,7 +30,7 @@ export default {
 </script>
 
 <template>
-  <Swiper :options="swiperOption" class="aspect-[830/390] md:aspect-auto rounded-b-lg">
+  <Swiper :options="swiperOption" class="aspect-[930/390] md:aspect-auto rounded-b-lg">
     <SwiperSlide v-for="(slide) in slides" :key="slide.id">
       <NuxtImg :src="`${slide.image}`" alt="" class="max-h-[568px] object-cover w-full h-full"/>
     </SwiperSlide>
