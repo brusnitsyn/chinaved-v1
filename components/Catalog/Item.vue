@@ -89,10 +89,10 @@ export default {
             <Button v-if="product.in_stock" @click="addBasket(product)" text="Купить" />
             <Button v-else text="Нет в наличии" disabled />
           </div>
-          <button class="w-[40px] flex justify-center items-center">
-<!--            <iconify-icon icon="material-symbols:favorite-outline-rounded" width="22" />-->
-            <iconify-icon icon="material-symbols:favorite-rounded" width="26" class="text-red-500" />
-          </button>
+<!--          <button class="w-[40px] flex justify-center items-center">-->
+<!--&lt;!&ndash;            <iconify-icon icon="material-symbols:favorite-outline-rounded" width="22" />&ndash;&gt;-->
+<!--            <iconify-icon icon="material-symbols:favorite-rounded" width="26" class="text-red-500" />-->
+<!--          </button>-->
         </div>
       </Skeleton>
     </div>

@@ -20,7 +20,7 @@ export default {
         </div>
       </div>
       <slot name="footer">
-        <ProfileFooter />
+        <PageFooter />
       </slot>
     </div>
     <PortalTarget name="app-after"/>

@@ -34,6 +34,7 @@ export default {
       menus: [
         { type: 'link', text: 'Главная', route: { name: 'index' } },
         { type: 'link', text: 'Каталог', route: { name: 'catalog' } },
+        { type: 'link', text: 'Таможенный сервис', route: { name: 'service' } },
         { type: 'link', text: 'Новости', route: { name: 'news' } },
         { type: 'link', text: 'Контакты', route: { name: 'contacts' } },
       ],
@@ -186,10 +187,10 @@ export default {
                     </div>
                     <div class="mt-8" v-if="searchResult.length">
                       <div class="grid grid-cols-4 gap-y-4 gap-x-4">
-                        <LazyCatalogItem v-for="item in searchResult.slice(0,8)" :product="item" />
+                        <LazyCatalogItem v-for="item in searchResult.slice(0,4)" :key="item.id" :product="item" />
                       </div>
                     </div>
-                    <div class="mt-2" v-if="searchResult.length > 6">
+                    <div class="mt-2" v-if="searchResult.length > 4">
                       <Anchor
                         :to="{ name: 'search' }"
                         text="Посмотреть все"

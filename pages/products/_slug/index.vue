@@ -133,7 +133,7 @@ export default {
           >
             <div class="relative lg:w-auto w-full lg:h-full">
               <div
-                v-if="product.media.length > 3"
+                v-if="product.media && product.media.length > 3"
                 class="swiper-prev flex items-center justify-center absolute left-0 top-1/2 lg:top-0 lg:left-1/2 bg-white shadow rounded-full p-1.5 -translate-x-3 -translate-y-3.5 lg:-translate-x-3.5 lg:-translate-y-3.5 z-10"
                 slot="button-prev"
               >
@@ -177,7 +177,7 @@ export default {
                 </Swiper>
               </div>
               <div
-                v-if="product.media.length > 3"
+                v-if="product.media && product.media.length > 3"
                 class="swiper-next flex items-center justify-center absolute right-0 bottom-1/2 lg:right-auto lg:bottom-0 lg:left-1/2 bg-white shadow rounded-full translate-x-3 translate-y-3.5 lg:-translate-x-3.5 p-1.5 lg:translate-y-3.5 z-10"
                 slot="button-next"
               >
@@ -257,8 +257,8 @@ export default {
                 {{ product.price | toRuble }}
               </h2>
 
-              <Button v-if="product.in_stock" class="w-1/2 lg:w-1/3">
-                Купить
+              <Button v-if="product.in_stock" class="w-1/2 lg:w-1/3" href="tel:+79145692181">
+                8-914-569-21-81
               </Button>
               <Button
                 v-else
