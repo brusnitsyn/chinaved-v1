@@ -2,7 +2,7 @@
 import {mapGetters} from "vuex";
 
 export default {
-  layout: 'profile',
+  layout: 'page',
   middleware: 'auth',
   // computed: {
   //   ...mapGetters({

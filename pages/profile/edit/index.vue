@@ -1,6 +1,6 @@
 <script>
 export default {
-  layout: 'profile',
+  layout: 'page',
   middleware: 'auth',
   data() {
     return {

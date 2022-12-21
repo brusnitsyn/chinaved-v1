@@ -1,6 +1,6 @@
 <script>
 export default {
-  layout: 'profile',
+  layout: 'page',
   middleware: 'auth',
 }
 </script>
@@ -12,7 +12,7 @@ export default {
         <PageTitle text="Избранное" />
       </PageHeader>
       <PageSection>
-
+        <p>В разработке...</p>
       </PageSection>
     </PageBody>
   </PageWrapper>
