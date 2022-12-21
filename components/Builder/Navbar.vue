@@ -1,5 +1,6 @@
 <script>
 import p from '@/package.json'
+import {debounce} from "~/helpers";
 
 export default {
   computed: {
@@ -23,6 +24,23 @@ export default {
       },
     },
   },
+  watch: {
+    $route() {
+      this.searchOverlayOn = false
+      this.search = ''
+      this.searchResult = []
+    },
+    searchOverlayOn: function (value) {
+      value ? document.body.classList.add('overflow-hidden') : document.body.classList.remove('overflow-hidden')
+    }
+  },
+  data() {
+    return {
+      searchOverlayOn: false,
+      search: '',
+      searchResult: [],
+    }
+  },
   methods: {
     updateDrawerOptions() {
       if (this.showOptions) {
@@ -31,14 +49,33 @@ export default {
         document.body.classList.remove('overflow-hidden')
       }
     },
-    // toggleDrawer() {
-    //   this.showDrawer = !this.showDrawer
-    // },
+    async openSearch() {
+      this.searchOverlayOn = true
+    },
     toggleOptions(show) {
       this.showOptions = show
       this.updateDrawerOptions()
     },
+    searchResponse: debounce(async function () {
+      if (this.search.length <= 2) {
+        this.searchResult = []
+        return
+      }
+      const response = await this.$axios.get(`/products?search=${this.search}`)
+      this.searchResult = await response.data.data
+    }, 300),
+    keyup(e) {
+      if(e.keyCode === 27) {
+        this.searchOverlayOn = false
+      }
+    }
   },
+  mounted() {
+    window.addEventListener('keyup', this.keyup)
+  },
+  destroyed() {
+    window.removeEventListener('keyup', this.keyup)
+  }
 }
 </script>
 
@@ -53,57 +90,98 @@ export default {
     <div class="max-w-8xl w-full mx-auto">
       <div class="py-3 lg:px-8 mx-4 lg:mx-0">
         <div class="relative flex items-center">
-          <!-- drawer:toggle -->
-          <!--          <div-->
-          <!--            v-if="$slots['drawer']"-->
-          <!--            class="lg:hidden flex items-center self-center justify-center mr-2"-->
-          <!--          >-->
-          <!--            <button-->
-          <!--              class="flex items-center focus:outline-none"-->
-          <!--              aria-label="Toggle Drawer Menu"-->
-          <!--              @click="toggleDrawer(true)"-->
-          <!--            >-->
-          <!--              <span-->
-          <!--                class="flex items-center text-gray-600 dark:text-gray-300 text-lg"-->
-          <!--                aria-hidden="true"-->
-          <!--              >-->
-          <!--                <iconify-icon icon="uil:bars" v-if="!showDrawer"/>-->
-          <!--                <iconify-icon icon="uil:times" v-else/>-->
-          <!--              </span>-->
-          <!--            </button>-->
-          <!--          </div>-->
-          <!-- title -->
           <slot name="title">
             <NuxtLink
               tag="a"
-              class="mr-3 flex-none overflow-hidden md:w-auto text-md font-bold text-gray-900 dark:text-gray-200"
+              class="mr-3 flex gap-x-2 overflow-hidden md:w-auto text-md font-bold text-gray-900 dark:text-gray-200"
               :to="{ name: 'index' }"
             >
-              <span class="sr-only">home</span>
+              <img src="/logo.svg" width="32" />
+              <span class="sr-only">На главную</span>
               <span class="flex items-center">
-                <!--                <iconify-icon icon="logos:nuxt-icon" />-->
                 {{ name }}
               </span>
             </NuxtLink>
           </slot>
+
           <!-- menu -->
           <slot name="menu" />
+
           <!-- options:toggle -->
-          <div class="flex-1 flex justify-end md:hidden items-center gap-x-4">
+          <div class="grow md:grow-0 flex justify-end items-center gap-x-4">
+
             <button
               class="flex items-center focus:outline-none"
               aria-label="To Search Page"
-              @click="$router.push({ name: 'search' })"
+              @click="openSearch"
             >
-              <span
-                class="flex items-center text-gray-600 dark:text-gray-300"
-                aria-hidden="true"
-              >
-                <iconify-icon icon="charm:search" class="text-xl" />
-              </span>
+            <span
+              class="flex items-center text-gray-600 dark:text-gray-300"
+            >
+              <iconify-icon icon="charm:search" class="text-xl" />
+            </span>
             </button>
+
+            <Portal to="app-after">
+              <Transition name="animation-search-panel">
+                <div
+                  v-if="searchOverlayOn"
+                  class="fixed inset-0 bg-dark/95 backdrop-filter backdrop-blur-md z-50 h-screen w-screen"
+                >
+                  <div class="w-full h-full max-h-screen mx-auto">
+                    <div class="max-w-8xl absolute top-6 bottom-6 lg:top-10 lg:bottom-10 lg:left-8 lg:right-8 px-4 w-full lg:w-auto lg:mx-auto">
+                      <div class="grid">
+                        <div class="flex justify-between items-center text-white">
+                          <h1>Поиск по каталогу</h1>
+                          <button
+                            class="flex justify-center items-center"
+                            @click="searchOverlayOn = false"
+                          >
+                            <iconify-icon
+                              icon="mdi:window-close"
+                              width="22"
+                              height="22"
+                            ></iconify-icon>
+                          </button>
+                        </div>
+                        <div class="mt-8">
+                          <input
+                            v-focus
+                            @input="searchResponse"
+                            v-model="search"
+                            type="text"
+                            name="searchQuery"
+                            class="text-white border-b border-white focus:border-primary-500 bg-transparent w-full placeholder-neutral-200 outline-none pb-1.5"
+                            placeholder="Введите наименование или артикул"
+                          />
+                        </div>
+                        <div class="my-8" v-if="searchResult.length">
+                          <div class="grid md:grid-cols-2 items-start lg:grid-cols-4 gap-y-4 gap-x-4 h-[calc(100vh-14rem)] overscroll-y-contain overflow-y-auto scrollbar-hide lg:scrollbar-default">
+                            <LazyCatalogItem v-for="(item, index) in searchResult" :key="index" :product="item" />
+                          </div>
+                        </div>
+                        <!--                      <div class="mt-2" v-if="searchResult.length > 4">-->
+                        <!--                        <LazyAnchor-->
+                        <!--                          :to="{ name: 'search' }"-->
+                        <!--                          text="Посмотреть все"-->
+                        <!--                          class="text-white"-->
+                        <!--                        >-->
+                        <!--                          <template #suffix>-->
+                        <!--                            <iconify-icon-->
+                        <!--                              icon="material-symbols:arrow-forward-rounded"-->
+                        <!--                            ></iconify-icon>-->
+                        <!--                          </template>-->
+                        <!--                        </LazyAnchor>-->
+                        <!--                      </div>-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Transition>
+            </Portal>
+
             <button
-              class="flex items-center focus:outline-none"
+              class="flex items-center focus:outline-none md:hidden"
               aria-label="Toggle Options Menu"
               @click="toggleOptions(true)"
             >
@@ -134,20 +212,20 @@ export default {
 </template>
 
 <style lang="scss">
-//.slide-fade-from-up-enter-active {
-//  transition: all 0.3s ease-out;
-//}
-//
-//.slide-fade-from-up-leave-active {
-//  transition: all 0.28s;
-//}
-//
-//.slide-fade-from-up-enter-to {
-//  transform: translateY(100%);
-//}
-//.slide-fade-from-up-leave-to {
-//  transform: translateY(-100%);
-//}
+.animation-search-panel-enter-active,
+.animation-search-panel-leave-active {
+  @apply transition-opacity ease-linear duration-150;
+}
+
+.animation-search-panel-enter,
+.animation-search-panel-leave-to {
+  @apply opacity-0;
+}
+
+.animation-search-panel-enter-to,
+.animation-search-panel-leave {
+  @apply opacity-100;
+}
 
 a.router-link-active {
   font-weight: bold;
