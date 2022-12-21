@@ -72,6 +72,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
+    '@nuxt/content',
     'portal-vue/nuxt',
     'unplugin-icons/nuxt',
     '@nuxt/image',
