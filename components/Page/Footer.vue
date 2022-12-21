@@ -18,13 +18,14 @@ export default {
         {type: 'link', text: 'Главная', route: {name: 'index'}},
         {type: 'link', text: 'Каталог', route: {name: 'catalog'}},
         {type: 'link', text: 'Таможенный сервис', route: {name: 'service'}},
-        {type: 'link', text: 'Новости', route: {name: 'news'}},
-        {type: 'link', text: 'Контакты', route: {name: 'contacts'}},
+        // {type: 'link', text: 'Новости', route: {name: 'news'}},
+        // {type: 'link', text: 'Контакты', route: {name: 'contacts'}},
       ],
       userMenu: [
         {type: 'link', text: 'Профиль', route: {name: 'profile'}},
         // {type: 'link', text: 'Корзина', route: {name: 'basket'}},
         // {type: 'link', text: 'Избранное', route: {name: 'profile-favorite'}},
+        {type: 'link', text: 'Реквизиты', route: {name: 'requisites'}},
       ],
       calls: [
         {type: 'link', href: 'tel:+79145692181', text: '8-914-569-21-81'},
